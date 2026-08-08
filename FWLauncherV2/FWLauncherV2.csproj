@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon\FWLauncherV2.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x64</Platforms>
+
+    <!-- Ürün kimliği (namespace/proje adı FWLauncherV2 olarak kalır) -->
+    <AssemblyName>PokeWingLauncher</AssemblyName>
+    <Product>PokeWingLauncher</Product>
+    <AssemblyTitle>PokeWingLauncher</AssemblyTitle>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="PokeWingLauncher.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Resource: hem uygulama ikonu hem de çalışma anında klasöre kopyalanabilsin diye gömülür -->
+    <Resource Include="icon\FWLauncherV2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CmlLib.Core" Version="4.0.5" />
+    <PackageReference Include="CmlLib.Core.Installer.Forge" Version="1.1.0" />
+    <PackageReference Include="CurseForge.APIClient" Version="4.2.0" />
+    <PackageReference Include="System.Management" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="PokeWingLauncher.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
+  </ItemGroup>
+
+</Project>

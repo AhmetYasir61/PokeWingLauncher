@@ -1,0 +1,51 @@
+<UserControl x:Class="FWLauncherV2.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <Grid VerticalAlignment="Center">
+        <StackPanel Width="330" HorizontalAlignment="Center">
+
+            <TextBlock Text="TEKRAR HOŞ GELDİN"
+                       Foreground="{StaticResource AccentAmberBrush}"
+                       FontSize="12" FontWeight="Bold"/>
+
+            <TextBlock Text="Giriş Yap"
+                       Style="{StaticResource Display}"
+                       Margin="0,4,0,4"/>
+
+            <TextBlock Text="Hesabınla giriş yaparak oyuna başla."
+                       Style="{StaticResource Caption}"
+                       Margin="0,0,0,22"/>
+
+            <!-- ERROR -->
+            <Border x:Name="ErrorBox" Visibility="Collapsed"
+                    Background="#1AEF4444" BorderBrush="#55EF4444" BorderThickness="1"
+                    CornerRadius="10" Padding="12,9" Margin="0,0,0,16">
+                <TextBlock x:Name="TxtErrorMessage"
+                           Foreground="{StaticResource DangerBrush}"
+                           TextWrapping="Wrap" FontSize="12.5" FontWeight="SemiBold"/>
+            </Border>
+
+            <!-- USERNAME -->
+            <TextBlock Text="Kullanıcı Adı" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+            <TextBox x:Name="TxtUsername" Style="{StaticResource FWTextBox}" Margin="0,0,0,14"/>
+
+            <!-- PASSWORD -->
+            <TextBlock Text="Şifre" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+            <PasswordBox x:Name="TxtPassword" Style="{StaticResource FWPasswordBox}" Margin="0,0,0,22"/>
+
+            <!-- LOGIN -->
+            <Button x:Name="BtnLogin" Content="GİRİŞ YAP"
+                    Style="{StaticResource PrimaryButton}"
+                    Click="BtnLogin_Click"/>
+
+            <!-- REGISTER -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
+                <TextBlock Text="Hesabın yok mu?" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                <Button Content="Kayıt Ol" Style="{StaticResource LinkButton}" Margin="6,0,0,0" Click="RegisterButton_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

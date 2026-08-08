@@ -1,0 +1,71 @@
+<UserControl x:Class="FWLauncherV2.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <Grid>
+        <Border Style="{StaticResource Card}" MaxWidth="660" Padding="30,26"
+                VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel>
+
+                <TextBlock Text="Launcher Ayarları" Style="{StaticResource H1}"/>
+                <TextBlock Text="Oyunun nasıl çalışacağını buradan yapılandır." Style="{StaticResource Caption}" Margin="0,4,0,22"/>
+
+                <!-- ===================== JAVA ===================== -->
+                <TextBlock Text="JAVA" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                <TextBlock Text="Java Yolu (java.exe)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TxtJavaPath" Grid.Column="0" Style="{StaticResource FWTextBoxReadOnly}"/>
+                    <Button Grid.Column="1" Content="Gözat" Width="110" Margin="10,0,0,0"
+                            Style="{StaticResource SecondaryButton}" Click="BtnSelectJava_Click"/>
+                </Grid>
+
+                <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="12" Padding="16" Margin="0,0,0,22">
+                    <StackPanel>
+                        <TextBlock Text="Minecraft 1.21.x için Java 21 gerekir" Style="{StaticResource H2}" FontSize="14"/>
+                        <TextBlock Text="• Java 17 ve altı sürümler desteklenmez." Style="{StaticResource Caption}" Margin="0,8,0,0"/>
+                        <TextBlock Text="• Seçilecek dosya: ...\jdk-21\bin\java.exe" Style="{StaticResource Caption}" Margin="0,3,0,0"/>
+                        <TextBlock Margin="0,8,0,0" FontSize="12.5">
+                            <Hyperlink NavigateUri="https://download.oracle.com/java/21/archive/jdk-21.0.9_windows-x64_bin.exe"
+                                       RequestNavigate="JavaLink_RequestNavigate"
+                                       Foreground="{StaticResource AccentAmberBrush}"
+                                       TextDecorations="None">
+                                Java 21'i buradan indir →
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- ===================== RAM ===================== -->
+                <TextBlock Text="PERFORMANS" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                <Grid Margin="0,0,0,8">
+                    <TextBlock Text="Ayrılan RAM" Style="{StaticResource Label}" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TxtRamValue" Text="4 GB" HorizontalAlignment="Right"
+                               Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold" FontSize="15"/>
+                </Grid>
+
+                <Slider x:Name="RamSlider" Minimum="4" Maximum="16" TickFrequency="1"
+                        IsSnapToTickEnabled="True" Style="{StaticResource FWSlider}"
+                        ValueChanged="RamSlider_ValueChanged" Margin="0,0,0,10"/>
+
+                <ProgressBar x:Name="RamUsageBar" Minimum="0" Maximum="100"
+                             Style="{StaticResource FWProgressBar}" Height="8"/>
+
+                <TextBlock Text="İpucu: Toplam RAM'inin yarısından fazlasını ayırma." Style="{StaticResource Caption}"
+                           Foreground="{StaticResource TextMutedBrush}" Margin="0,8,0,0"/>
+
+                <!-- ===================== SAVE ===================== -->
+                <Button Content="Ayarları Kaydet" Width="170" Height="46" Margin="0,26,0,0"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource PrimaryButton}" Click="BtnSave_Click"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,7 @@
+C:\Users\Hınzır\Desktop\Path\FWLauncherV2.pdb
+C:\Users\Hınzır\Desktop\Path\D3DCompiler_47_cor3.dll
+C:\Users\Hınzır\Desktop\Path\PenImc_cor3.dll
+C:\Users\Hınzır\Desktop\Path\PresentationNative_cor3.dll
+C:\Users\Hınzır\Desktop\Path\vcruntime140_cor3.dll
+C:\Users\Hınzır\Desktop\Path\wpfgfx_cor3.dll
+C:\Users\Hınzır\Desktop\Path\FWLauncherV2.exe

@@ -1,0 +1,154 @@
+<UserControl x:Class="FWLauncherV2.Views.DestekView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="328"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===================== SOHBET LİSTESİ ===================== -->
+        <Grid Grid.Column="0" Margin="0,0,16,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="2,0,2,12">
+                <TextBlock x:Name="TxtListTitle" Text="Destek" Style="{StaticResource Display}" FontSize="22"/>
+                <TextBlock x:Name="TxtListSub" Text="Bir talep aç, anında yanıt al." Style="{StaticResource Caption}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                <Button x:Name="BtnNew" Content="+ Yeni Ticket" Height="40" HorizontalAlignment="Stretch" Margin="0,12,0,0"
+                        Style="{StaticResource PrimaryButton}" FontSize="13.5" Click="New_Click"/>
+            </StackPanel>
+
+            <TextBlock x:Name="EmptyHint" Grid.Row="1" Visibility="Collapsed"
+                       Text="Henüz talep yok. 'Yeni Ticket' ile başla." Style="{StaticResource Caption}"
+                       Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       TextWrapping="Wrap" TextAlignment="Center"/>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="TicketList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Tag="{Binding}" Click="Ticket_Click" Cursor="Hand" Margin="0,0,8,8"
+                                    HorizontalContentAlignment="Stretch" Background="Transparent" BorderThickness="0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="bd" CornerRadius="13" Background="{StaticResource SurfaceBrush}"
+                                                BorderBrush="{StaticResource StrokeSoftBrush}" BorderThickness="1" Padding="14,11">
+                                            <StackPanel>
+                                                <Grid>
+                                                    <TextBlock Text="{Binding Subject}" FontWeight="Bold" FontSize="14"
+                                                               Foreground="{StaticResource TextPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding StatusText}" HorizontalAlignment="Right"
+                                                               Foreground="{StaticResource AccentAmberBrush}" FontSize="11" FontWeight="SemiBold"/>
+                                                </Grid>
+                                                <TextBlock Text="{Binding PlayerName}" Style="{StaticResource Caption}" FontSize="11.5" Margin="0,2,0,0"/>
+                                                <TextBlock Text="{Binding Preview}" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}"
+                                                           TextTrimming="CharacterEllipsis" Margin="0,3,0,0"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===================== SOHBET ===================== -->
+        <Border Grid.Column="1" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- chat header -->
+                <Border Grid.Row="0" Background="{StaticResource SurfaceAltBrush}" CornerRadius="18,18,0,0" Padding="18,14">
+                    <Grid>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtChatSubject" Text="Bir talep seç" FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="TxtChatStatus" Text="" Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button x:Name="BtnClaim" Content="Al" Width="84" Height="36" Visibility="Collapsed"
+                                    Style="{StaticResource PrimaryButton}" FontSize="13" Click="Claim_Click"/>
+                            <Button x:Name="BtnClose" Content="Kapat" Width="92" Height="36" Margin="8,0,0,0" Visibility="Collapsed"
+                                    Style="{StaticResource SecondaryButton}" Click="CloseTicket_Click"/>
+                            <Button x:Name="BtnDelete" Content="Sil" Width="74" Height="36" Margin="8,0,0,0" Visibility="Collapsed"
+                                    Style="{StaticResource SecondaryButton}" Foreground="{StaticResource DangerBrush}" Click="DeleteTicket_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- messages -->
+                <ScrollViewer x:Name="MsgScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,14">
+                    <StackPanel x:Name="MessagesPanel"/>
+                </ScrollViewer>
+                <TextBlock x:Name="TxtNoTicket" Grid.Row="1" Text="Soldan bir talep seç ya da yeni bir talep aç."
+                           Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                <!-- rating bar -->
+                <Border x:Name="RatingBar" Grid.Row="2" Visibility="Collapsed" Background="{StaticResource SurfaceAltBrush}" Padding="18,12">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="Hizmeti puanla:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,10,0"/>
+                        <Button Tag="1" Content="★" Style="{StaticResource LinkButton}" FontSize="26" Margin="3,0" Click="Star_Click"/>
+                        <Button Tag="2" Content="★" Style="{StaticResource LinkButton}" FontSize="26" Margin="3,0" Click="Star_Click"/>
+                        <Button Tag="3" Content="★" Style="{StaticResource LinkButton}" FontSize="26" Margin="3,0" Click="Star_Click"/>
+                        <Button Tag="4" Content="★" Style="{StaticResource LinkButton}" FontSize="26" Margin="3,0" Click="Star_Click"/>
+                        <Button Tag="5" Content="★" Style="{StaticResource LinkButton}" FontSize="26" Margin="3,0" Click="Star_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- input -->
+                <Border Grid.Row="3" Background="{StaticResource SurfaceAltBrush}" CornerRadius="0,0,18,18" Padding="14,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtInput" Style="{StaticResource FWTextBox}" Height="44"
+                                 IsEnabled="False" KeyDown="Input_KeyDown"/>
+                        <Button x:Name="BtnSend" Grid.Column="1" Content="Gönder" Width="100" Height="44" Margin="10,0,0,0"
+                                IsEnabled="False" Style="{StaticResource PrimaryButton}" FontSize="13.5" Click="Send_Click"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ===================== YENİ TICKET PANELİ ===================== -->
+        <Border x:Name="NewTicketPanel" Grid.ColumnSpan="2" Visibility="Collapsed"
+                Background="#CC05070F">
+            <Border Style="{StaticResource Card}" Width="460" Padding="26" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Yeni Destek Talebi" Style="{StaticResource H1}" FontSize="20"/>
+                    <TextBlock Text="Konuyu ve sorununu yaz; ekibimiz canlı yanıtlasın." Style="{StaticResource Caption}" Margin="0,4,0,16"/>
+                    <TextBlock Text="Konu" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtNewSubject" Style="{StaticResource FWTextBox}" Margin="0,0,0,12"/>
+                    <TextBlock Text="Mesaj" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtNewMessage" Style="{StaticResource FWTextBox}" Height="96" TextWrapping="Wrap"
+                             AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,18"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Vazgeç" Height="44" Margin="0,0,6,0" Style="{StaticResource SecondaryButton}" Click="NewCancel_Click"/>
+                        <Button x:Name="BtnNewSubmit" Grid.Column="1" Content="Talebi Aç" Height="44" Margin="6,0,0,0" Style="{StaticResource PrimaryButton}" Click="NewSubmit_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,534 @@
+<UserControl x:Class="FWLauncherV2.Views.ControlPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===================== SEKME SEÇİCİ ===================== -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2,0,2,14">
+            <Button x:Name="BtnTabProducts" Content="Ürünler" MinWidth="120" Margin="0,0,8,0"
+                    Style="{StaticResource ChipButton}" Tag="active" Click="TabProducts_Click"/>
+            <Button x:Name="BtnTabAds" Content="Duyurular" MinWidth="120" Margin="0,0,8,0"
+                    Style="{StaticResource ChipButton}" Click="TabAds_Click"/>
+            <Button x:Name="BtnTabLinks" Content="Bağlantılar" MinWidth="120" Margin="0,0,8,0"
+                    Style="{StaticResource ChipButton}" Click="TabLinks_Click"/>
+            <Button x:Name="BtnTabUsers" Content="Kullanıcılar" MinWidth="120" Margin="0,0,8,0"
+                    Style="{StaticResource ChipButton}" Click="TabUsers_Click"/>
+            <Button x:Name="BtnTabDevs" Content="Yetkiler" MinWidth="120"
+                    Style="{StaticResource ChipButton}" Click="TabDevs_Click"/>
+        </StackPanel>
+
+        <!-- ===================== ÜRÜN PANELİ ===================== -->
+        <Grid x:Name="ProductsPanel" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="384"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ÜRÜN LİSTESİ -->
+            <Grid Grid.Column="0" Margin="0,0,16,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="2,0,2,12">
+                    <StackPanel>
+                        <TextBlock Text="Ürün Yönetimi" Style="{StaticResource Display}" FontSize="22"/>
+                        <TextBlock Text="Market ürünlerini ekle, düzenle veya sil." Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Button Content="Yenile" Width="100" Height="36" HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Style="{StaticResource SecondaryButton}" Click="Refresh_Click"/>
+                </Grid>
+
+                <TextBlock x:Name="EmptyHint" Grid.Row="1" Visibility="Collapsed"
+                           Text="Henüz ürün yok. Sağdaki formdan yeni ürün ekleyebilirsin."
+                           Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ProductList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,8,10" Background="{StaticResource SurfaceBrush}" CornerRadius="12"
+                                        BorderBrush="{StaticResource StrokeSoftBrush}" BorderThickness="1" Padding="12,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Width="44" Height="44" CornerRadius="9" Background="{StaticResource SurfaceAltBrush}">
+                                            <Image Source="{Binding DisplayImage}" Width="30" Height="30"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="12,0,8,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="{Binding Category}" Style="{StaticResource Caption}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding PriceText}" VerticalAlignment="Center" Margin="0,0,12,0"
+                                                   Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold" FontSize="13"/>
+                                        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Content="Düzenle" Height="32" MinWidth="76" Style="{StaticResource SecondaryButton}"
+                                                    Tag="{Binding}" Click="Edit_Click"/>
+                                            <Button Content="Sil" Height="32" MinWidth="52" Margin="8,0,0,0"
+                                                    Style="{StaticResource SecondaryButton}" Foreground="{StaticResource DangerBrush}"
+                                                    Tag="{Binding}" Click="Delete_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- ÜRÜN DÜZENLEYİCİ -->
+            <Border Grid.Column="1" Style="{StaticResource Card}" Padding="20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock x:Name="TxtFormTitle" Text="Yeni Ürün" Style="{StaticResource H1}" FontSize="19"/>
+                        <TextBlock Text="Alanları doldur ve kaydet." Style="{StaticResource Caption}" Margin="0,2,0,16"/>
+
+                        <TextBlock Text="Ürün Adı" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtName" Style="{StaticResource FWTextBox}" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Kategori" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtCategory" Style="{StaticResource FWTextBox}" Text="Genel" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Tür" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="CmbType" Height="40" Padding="10,0" Margin="0,0,0,12" VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="Eşya" Tag="item" IsSelected="True"/>
+                            <ComboBoxItem Content="Kit (çoklu eşya)" Tag="kit"/>
+                            <ComboBoxItem Content="Anahtar" Tag="key"/>
+                            <ComboBoxItem Content="Rütbe" Tag="rank"/>
+                            <ComboBoxItem Content="Coin" Tag="coin"/>
+                            <ComboBoxItem Content="Kozmetik" Tag="cosmetic"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Fiyat (Coin)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtPrice" Style="{StaticResource FWTextBox}" Text="0" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Açıklama" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtDesc" Style="{StaticResource FWTextBox}" Height="60" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Katalog Açıklaması (uzun · ne işe yarar)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtLongDesc" Style="{StaticResource FWTextBox}" Height="72" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Rozet (örn. YENİ, İNDİRİM)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtBadge" Style="{StaticResource FWTextBox}" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Görsel" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TxtImage" Style="{StaticResource FWTextBox}"/>
+                            <Button x:Name="BtnUpload" Grid.Column="1" Content="Yükle" Width="84" Height="44" Margin="8,0,0,0"
+                                    Style="{StaticResource SecondaryButton}" Click="Upload_Click"/>
+                        </Grid>
+
+                        <Border Width="96" Height="96" CornerRadius="12" Background="{StaticResource SurfaceAltBrush}"
+                                HorizontalAlignment="Left" Margin="0,0,0,14">
+                            <Image x:Name="ImgPreview" Width="64" Height="64" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+
+                        <TextBlock Text="Teslimat Komutu" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtCommand" Style="{StaticResource FWTextBox}" Height="54" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,6"/>
+                        <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16">
+                            Satın alınca çalışır. <Run Text="{}{player}" FontWeight="Bold"/> oyuncu adıyla değişir.<LineBreak/>
+                            Örn: <Run Text="give {}{player} minecraft:diamond 64" Foreground="{StaticResource AccentAmberBrush}"/>  ·  modlu: <Run Text="give {}{player} create:brass_ingot 16" Foreground="{StaticResource AccentAmberBrush}"/>  ·  rütbe: <Run Text="lp user {}{player} parent add vip" Foreground="{StaticResource AccentAmberBrush}"/>
+                        </TextBlock>
+
+                        <TextBlock Text="Kit İçeriği — her satır bir komut (Tür: Kit ise)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtKitCommands" Style="{StaticResource FWTextBox}" Height="80" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,6"/>
+                        <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,14">
+                            Birden çok eşya/komut için her satıra bir komut yaz. Boşsa üstteki tekil komut kullanılır.<LineBreak/>
+                            Slot, komut sayısına göre otomatik ayarlanır.
+                        </TextBlock>
+
+                        <TextBlock Text="Galeri görselleri — her satır bir URL (isteğe bağlı)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtGallery" Style="{StaticResource FWTextBox}" Height="54" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,12"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="Slot (gereken boş yer)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                                <TextBox x:Name="TxtSlots" Style="{StaticResource FWTextBox}" Text="1"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                <TextBlock Text="Stok (-1 sınırsız)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                                <TextBox x:Name="TxtStock" Style="{StaticResource FWTextBox}" Text="-1"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Temizle" Height="44" Margin="0,0,6,0"
+                                    Style="{StaticResource SecondaryButton}" Click="Clear_Click"/>
+                            <Button x:Name="BtnSave" Grid.Column="1" Content="Kaydet" Height="44" Margin="6,0,0,0"
+                                    Style="{StaticResource PrimaryButton}" Click="Save_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- ===================== DUYURU PANELİ ===================== -->
+        <Grid x:Name="AdsPanel" Grid.Row="1" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="384"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- DUYURU LİSTESİ -->
+            <Grid Grid.Column="0" Margin="0,0,16,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="2,0,2,12">
+                    <StackPanel>
+                        <TextBlock Text="Duyuru Yönetimi" Style="{StaticResource Display}" FontSize="22"/>
+                        <TextBlock Text="Reklamlar &amp; Duyurular sayfasındaki içerikleri yönet. Yayınladığın anda oyunculara otomatik yansır."
+                                   Style="{StaticResource Caption}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Button Content="Yenile" Width="100" Height="36" HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Style="{StaticResource SecondaryButton}" Click="RefreshAds_Click"/>
+                </Grid>
+
+                <TextBlock x:Name="EmptyAdHint" Grid.Row="1" Visibility="Collapsed"
+                           Text="Henüz duyuru yok. Sağdaki formdan yeni duyuru yayınlayabilirsin."
+                           Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="AdList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,8,10" Background="{StaticResource SurfaceBrush}" CornerRadius="12"
+                                        BorderBrush="{StaticResource StrokeSoftBrush}" BorderThickness="1" Padding="12,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Width="44" Height="44" CornerRadius="9" Background="{StaticResource SurfaceAltBrush}">
+                                            <Image Source="{Binding DisplayImage}" Width="30" Height="30"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="12,0,8,0" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Visibility="{Binding BadgeVisibility}" Background="{StaticResource AccentSoftBrush}"
+                                                        CornerRadius="5" Padding="6,1" Margin="0,0,8,3" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Badge}" Foreground="{StaticResource AccentAmberBrush}"
+                                                               FontSize="9.5" FontWeight="Bold"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14"
+                                                           Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Description}" Style="{StaticResource Caption}"
+                                                       TextTrimming="CharacterEllipsis" MaxHeight="18"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Content="Düzenle" Height="32" MinWidth="76" Style="{StaticResource SecondaryButton}"
+                                                    Tag="{Binding}" Click="EditAd_Click"/>
+                                            <Button Content="Sil" Height="32" MinWidth="52" Margin="8,0,0,0"
+                                                    Style="{StaticResource SecondaryButton}" Foreground="{StaticResource DangerBrush}"
+                                                    Tag="{Binding}" Click="DeleteAd_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- DUYURU DÜZENLEYİCİ -->
+            <Border Grid.Column="1" Style="{StaticResource Card}" Padding="20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock x:Name="TxtAdFormTitle" Text="Yeni Duyuru" Style="{StaticResource H1}" FontSize="19"/>
+                        <TextBlock Text="Yayınla ve oyunculara otomatik yansısın." Style="{StaticResource Caption}" Margin="0,2,0,16"/>
+
+                        <TextBlock Text="Başlık" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtAdTitle" Style="{StaticResource FWTextBox}" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Açıklama" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtAdDesc" Style="{StaticResource FWTextBox}" Height="78" TextWrapping="Wrap"
+                                 AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Rozet (örn. ETKİNLİK, KAMPANYA)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtAdBadge" Style="{StaticResource FWTextBox}" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Görsel" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TxtAdImage" Style="{StaticResource FWTextBox}"/>
+                            <Button x:Name="BtnAdUpload" Grid.Column="1" Content="Yükle" Width="84" Height="44" Margin="8,0,0,0"
+                                    Style="{StaticResource SecondaryButton}" Click="UploadAd_Click"/>
+                        </Grid>
+
+                        <Border Width="96" Height="96" CornerRadius="12" Background="{StaticResource SurfaceAltBrush}"
+                                HorizontalAlignment="Left" Margin="0,0,0,14">
+                            <Image x:Name="ImgAdPreview" Width="64" Height="64" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+
+                        <TextBlock Text="Bağlantı (isteğe bağlı)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtAdUrl" Style="{StaticResource FWTextBox}" Margin="0,0,0,6"/>
+                        <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16">
+                            Doldurursan "Detay" butonu bu adresi açar. Örn: <Run Text="https://discord.gg/..." Foreground="{StaticResource AccentAmberBrush}"/>
+                        </TextBlock>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Temizle" Height="44" Margin="0,0,6,0"
+                                    Style="{StaticResource SecondaryButton}" Click="ClearAd_Click"/>
+                            <Button x:Name="BtnAdSave" Grid.Column="1" Content="Yayınla" Height="44" Margin="6,0,0,0"
+                                    Style="{StaticResource PrimaryButton}" Click="SaveAd_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- ===================== BAĞLANTILAR PANELİ ===================== -->
+        <Grid x:Name="LinksPanel" Grid.Row="1" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}" Padding="24" MaxWidth="560" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Text="Bağlantılar" Style="{StaticResource Display}" FontSize="22"/>
+                    <TextBlock Text="Ana sayfadaki Discord butonunun ve web adresinin nereye gideceğini buradan ayarla. Kaydettiğin an oyunculara yansır."
+                               Style="{StaticResource Caption}" Margin="0,2,0,20" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Discord davet adresi" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtDiscord" Style="{StaticResource FWTextBox}" Margin="0,0,0,6"/>
+                    <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,18">
+                        Ana sayfadaki "Discord" kutusu bu adresi açar. Örn: <Run Text="https://discord.gg/RrBTdgrUM2" Foreground="{StaticResource AccentAmberBrush}"/>
+                    </TextBlock>
+
+                    <TextBlock Text="Web sitesi adresi" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtWebsite" Style="{StaticResource FWTextBox}" Margin="0,0,0,6"/>
+                    <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,22">
+                        Örn: <Run Text="https://pokewing.com" Foreground="{StaticResource AccentAmberBrush}"/>
+                    </TextBlock>
+
+                    <Button x:Name="BtnSaveLinks" Content="Kaydet" Height="46" Width="180" HorizontalAlignment="Left"
+                            Style="{StaticResource PrimaryButton}" Click="SaveLinks_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ===================== KULLANICI / YETKİ PANELİ ===================== -->
+        <Grid x:Name="UsersPanel" Grid.Row="1" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="2,0,2,12">
+                <TextBlock Text="Kullanıcı &amp; Yetki Yönetimi" Style="{StaticResource Display}" FontSize="22"/>
+                <TextBlock Text="Oyuncuları listele, rol ver veya al. (owner/admin yalnız)" Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="2,0,2,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TxtUserSearch" Grid.Column="0" Style="{StaticResource FWTextBox}"
+                         KeyDown="UserSearch_KeyDown"/>
+                <Button Grid.Column="1" Content="Ara / Yenile" Width="130" Height="44" Margin="10,0,0,0"
+                        Style="{StaticResource SecondaryButton}" Click="UserSearch_Click"/>
+            </Grid>
+
+            <TextBlock x:Name="EmptyUserHint" Grid.Row="2" Visibility="Collapsed"
+                       Text="Kullanıcı bulunamadı." Style="{StaticResource Caption}" Foreground="{StaticResource TextMutedBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="UserList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,8,10" Background="{StaticResource SurfaceBrush}" CornerRadius="12"
+                                    BorderBrush="{StaticResource StrokeSoftBrush}" BorderThickness="1" Padding="12,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="{StaticResource AccentGradient}">
+                                        <TextBlock Text="{Binding Initial}" Foreground="#FF161616" FontWeight="Bold" FontSize="16"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="12,0,8,0" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="6" Padding="7,1" Margin="9,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding RoleText}" Foreground="{StaticResource AccentAmberBrush}" FontSize="10.5" FontWeight="Bold"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding CoinsText}" Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Visibility="{Binding ModVisibility}" Background="#33FF2E92" CornerRadius="6" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ModText}" Foreground="{StaticResource DangerBrush}" FontSize="10.5" FontWeight="Bold"/>
+                                        </Border>
+                                        <Button Content="Rol" Height="30" MinWidth="54" Style="{StaticResource SecondaryButton}" FontSize="11.5"
+                                                Tag="{Binding}" Click="RolePick_Click"/>
+                                        <Button Content="Uyar" Height="30" MinWidth="54" Margin="6,0,0,0" Style="{StaticResource SecondaryButton}" FontSize="11.5"
+                                                Foreground="{StaticResource AccentAmberBrush}" Tag="{Binding}" Click="WarnPick_Click"/>
+                                        <Button Content="{Binding BanButtonText}" Height="30" MinWidth="54" Margin="6,0,0,0" Style="{StaticResource SecondaryButton}" FontSize="11.5"
+                                                Foreground="{StaticResource DangerBrush}" Tag="{Binding}" Click="Ban_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===================== YETKİLER PANELİ (dev/owner) ===================== -->
+        <Grid x:Name="DevsPanel" Grid.Row="1" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Yeni yetki ekle -->
+            <Border Grid.Row="0" Style="{StaticResource Card}" Padding="16" Margin="2,0,2,12">
+                <StackPanel>
+                    <TextBlock Text="Item Creator / Geliştirici Yetkisi Ver" FontWeight="Bold" FontSize="15" Margin="0,0,0,4"/>
+                    <TextBlock Text="Dev = Item Creator'a erişir. Owner = tam yetki. Kullanıcı adı oyundaki adla aynı olmalı."
+                               Opacity="0.7" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="DevUserBox" Width="200" Margin="0,0,8,0"
+                                 Style="{StaticResource FWTextBox}"/>
+                        <Button x:Name="RoleDevBtn" Content="dev" MinWidth="70" Margin="0,0,6,0" Tag="active"
+                                Style="{StaticResource ChipButton}" Click="RoleDev_Click"/>
+                        <Button x:Name="RoleOwnerBtn" Content="owner" MinWidth="70" Margin="0,0,10,0"
+                                Style="{StaticResource ChipButton}" Click="RoleOwner_Click"/>
+                        <Button Content="Ver / Güncelle" MinWidth="120"
+                                Style="{StaticResource PrimaryButton}" Click="DevAdd_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Mevcut yetkiler listesi -->
+            <Border Grid.Row="1" Style="{StaticResource Card}" Padding="8" Margin="2,0,2,2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Mevcut Yetkiler" FontWeight="Bold" Margin="8,6,0,8"/>
+                    <TextBlock x:Name="EmptyDevHint" Grid.Row="1" Text="Henüz yetki verilmemiş."
+                               Opacity="0.6" Margin="8" Visibility="Collapsed"/>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="DevList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Card}" Margin="0,0,0,6" Padding="12,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Username}" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                <Border Margin="10,0,0,0" Padding="8,2" CornerRadius="6" Background="#22F5A300">
+                                                    <TextBlock Text="{Binding Role}" FontSize="12" Foreground="#F5A300"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Content="Kaldır" MinWidth="80"
+                                                    Style="{StaticResource ChipButton}"
+                                                    Tag="{Binding Username}" Click="DevRemove_Click"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ===================== ROL SEÇ OVERLAY ===================== -->
+        <Border x:Name="RolePanel" Grid.RowSpan="2" Visibility="Collapsed" Background="#CC05070F">
+            <Border Style="{StaticResource Card}" Width="360" Padding="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock x:Name="TxtRoleUser" Text="Kullanıcı" Style="{StaticResource H1}" FontSize="19"/>
+                    <TextBlock Text="Verilecek rolü seç:" Style="{StaticResource Caption}" Margin="0,4,0,16"/>
+                    <Button Content="Oyuncu" Height="42" Margin="0,0,0,8" HorizontalAlignment="Stretch" Style="{StaticResource SecondaryButton}" Tag="player" Click="RoleSet_Click"/>
+                    <Button Content="Rehber" Height="42" Margin="0,0,0,8" HorizontalAlignment="Stretch" Style="{StaticResource SecondaryButton}" Tag="rehber" Click="RoleSet_Click"/>
+                    <Button Content="Moderatör" Height="42" Margin="0,0,0,8" HorizontalAlignment="Stretch" Style="{StaticResource SecondaryButton}" Tag="moderator" Click="RoleSet_Click"/>
+                    <Button Content="Admin" Height="42" Margin="0,0,0,16" HorizontalAlignment="Stretch" Style="{StaticResource SecondaryButton}"
+                            Foreground="{StaticResource AccentAmberBrush}" Tag="admin" Click="RoleSet_Click"/>
+                    <Button Content="Vazgeç" Height="42" HorizontalAlignment="Stretch" Style="{StaticResource SecondaryButton}" Click="ModCancel_Click"/>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- ===================== UYARI OVERLAY ===================== -->
+        <Border x:Name="WarnPanel" Grid.RowSpan="2" Visibility="Collapsed" Background="#CC05070F">
+            <Border Style="{StaticResource Card}" Width="440" Padding="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock x:Name="TxtWarnUser" Text="Kullanıcıyı Uyar" Style="{StaticResource H1}" FontSize="19"/>
+                    <TextBlock Text="Bu süre boyunca kullanıcının launcher'ı kilitlenir." Style="{StaticResource Caption}" Margin="0,4,0,16"/>
+                    <TextBlock Text="Süre" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtWarnAmount" Grid.Column="0" Width="84" Text="30" Style="{StaticResource FWTextBox}" HorizontalAlignment="Left"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="ChipDk" Content="Dakika" Tag="active" CommandParameter="1" Style="{StaticResource ChipButton}" Margin="3,0" Click="WarnUnit_Click"/>
+                            <Button x:Name="ChipSaat" Content="Saat" CommandParameter="60" Style="{StaticResource ChipButton}" Margin="3,0" Click="WarnUnit_Click"/>
+                            <Button x:Name="ChipGun" Content="Gün" CommandParameter="1440" Style="{StaticResource ChipButton}" Margin="3,0" Click="WarnUnit_Click"/>
+                            <Button x:Name="ChipAy" Content="Ay" CommandParameter="43200" Style="{StaticResource ChipButton}" Margin="3,0" Click="WarnUnit_Click"/>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Text="Sebep (isteğe bağlı)" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtWarnReason" Style="{StaticResource FWTextBox}" Height="64" TextWrapping="Wrap"
+                             AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,0,0,18"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Vazgeç" Height="44" Margin="0,0,6,0" Style="{StaticResource SecondaryButton}" Click="ModCancel_Click"/>
+                        <Button x:Name="BtnWarnSubmit" Grid.Column="1" Content="Uyar &amp; Kilitle" Height="44" Margin="6,0,0,0" Style="{StaticResource PrimaryButton}" Click="WarnSubmit_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>
