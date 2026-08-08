@@ -1,2 +1,0 @@
-E:\Projeler\FWLauncherV2\FWLauncherV2\bin\Publish\PokeWingLauncher.pdb
-E:\Projeler\FWLauncherV2\FWLauncherV2\bin\Publish\PokeWingLauncher.exe
